@@ -1,0 +1,18 @@
+.padding {
+    &-top {
+        &-15 {
+            padding-top: 15px;
+        }
+        &-25 {
+            padding-top: 25px;
+        }
+    }
+    &-bottom {
+        &-15 {
+            padding-bottom: 15px;
+        }
+        &-25 {
+            padding-bottom: 25px;
+        }
+    }
+}
