@@ -1,15 +1,19 @@
 import React from "react";
+import RoomsFilter from "../RoomsFilter/RoomsFilter";
+import { withRoomConsumer } from "../../context";
+import RoomsList from "../RoomsFilter/RoomsList/RoomsList";
 
-const Rooms = () => {
+function Room({ context }) {
+    const { loading, sortedRooms, rooms } = context;
+    if (loading) {
+        return <div>Loading</div>;
+    }
     return (
-        <section className='room'>
-            <h1>Pokoje</h1>
-            <div>hej</div>
-            <div>hej</div>
-            <div>hej</div>
-            <div>hej</div>
-        </section>
+        <>
+            <RoomsFilter rooms={rooms} />
+            <RoomsList rooms={sortedRooms} />
+        </>
     );
-};
+}
 
-export default Rooms;
+export default withRoomConsumer(Room);

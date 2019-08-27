@@ -31,24 +31,35 @@ export default class RoomProvider extends React.Component {
         try {
             console.log("data", data);
 
-            // let rooms = this.formatData(data);
-            // let featuredRooms = rooms.filter(room => room.featured === true);
+            let rooms = this.formatData(data);
+            let featuredRooms = rooms.filter(room => room.featured === true);
 
-            // let maxPrice = Math.max(...rooms.map(item => item.price));
-            // let maxSize = Math.max(...rooms.map(item => item.size));
-            // this.setState({
-            //     rooms,
-            //     featuredRooms,
-            //     sortedRooms: rooms,
-            //     loading: false,
-            //     price: maxPrice,
-            //     maxPrice,
-            //     maxSize
-            // });
+            let maxPrice = Math.max(...rooms.map(item => item.price));
+            let maxSize = Math.max(...rooms.map(item => item.size));
+            this.setState({
+                rooms,
+                featuredRooms,
+                sortedRooms: rooms,
+                loading: false,
+                price: maxPrice,
+                maxPrice,
+                maxSize
+            });
         } catch (error) {
             console.log(error);
         }
     };
+
+    formatData(items) {
+        let tempItems = items.map(item => {
+            let id = item.sys.id;
+            let images = item.fields.images.map(image => image.fields.file.url);
+            let room = { ...item.fields, images, id };
+
+            return room;
+        });
+        return tempItems;
+    }
 
     render() {
         return <RoomContext.Provider value={{ ...this.state }}>{this.props.children}</RoomContext.Provider>;
@@ -57,4 +68,10 @@ export default class RoomProvider extends React.Component {
 
 const RoomConsumer = RoomContext.Consumer;
 
-export { RoomProvider, RoomConsumer };
+export function withRoomConsumer(Component) {
+    return function ConsumerWrapper(props) {
+        return <RoomConsumer>{value => <Component {...props} context={value} />}</RoomConsumer>;
+    };
+}
+
+export { RoomProvider, RoomConsumer, RoomContext };
